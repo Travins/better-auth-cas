@@ -1,43 +1,33 @@
-# Better Auth CAS Skill
+# better-auth-cas
 
-一个最小化的开源仓库，目标只有两件事：
+[![CI](https://github.com/Travins/better-auth-cas/actions/workflows/ci.yml/badge.svg)](https://github.com/Travins/better-auth-cas/actions/workflows/ci.yml)
 
-- 提供可发布的 `better-auth-cas` 插件（NPM 包形态）
-- 提供一个可复制的 CAS 集成 Skill 说明（`SKILL.md`）
+A clean open-source repo for building and shipping a standard CAS integration for Better Auth.
 
-## 仓库内容
+## What This Repo Contains
 
-- `packages/better-auth-cas`: 标准 CAS 插件源码
-- `examples/simple-next`: 单一最小示例（Next.js App Router）
-- `SKILL.md`: 集成步骤与落地约束
+- `packages/better-auth-cas`: the plugin package source (publishable to npm)
+- `examples/simple-next`: one minimal Next.js App Router example
+- `SKILL.md`: integration playbook for dropping CAS into existing Better Auth apps
 
-## 安全说明
-
-- 仓库不包含真实 CAS 生产地址、真实密钥或数据库凭据。
-- `.env` 已忽略，仅保留 `.env.example` 占位符。
-
-## 本地验证
-
-```bash
-npm run plugin:install
-npm run plugin:build
-npm run plugin:test
-```
-
-或一键：
+## Quick Start (Repository)
 
 ```bash
 npm run plugin:verify
 ```
 
-## 插件快速使用
+This runs install + build + tests for the plugin package.
+
+## Plugin Quick Start (Application)
 
 ```ts
 import { betterAuth } from 'better-auth';
 import { createStandardCasPlugin } from 'better-auth-cas';
 
 export const auth = betterAuth({
-  emailAndPassword: { enabled: true },
+  emailAndPassword: {
+    enabled: true,
+  },
   plugins: [
     createStandardCasPlugin({
       casBaseUrl: 'https://cas.example.com/cas',
@@ -48,6 +38,30 @@ export const auth = betterAuth({
 });
 ```
 
-## 发布到 npm
+Then expose Better Auth with your route handler and call:
 
-见 [docs/release-plugin.md](docs/release-plugin.md)。
+- `POST /api/auth/sign-in/cas`
+- `GET /api/auth/cas/callback`
+
+## CAS Flow
+
+1. Frontend triggers `POST /api/auth/sign-in/cas`.
+2. Plugin redirects user to CAS `/login?service=...`.
+3. CAS returns `ticket` to callback endpoint.
+4. Plugin validates ticket via CAS `/serviceValidate`.
+5. Better Auth creates or links account and issues session.
+
+## Security Notes
+
+- No real production CAS URL, keys, or DB credentials are stored in this repository.
+- `.env` is ignored; only `.env.example` placeholders are tracked.
+
+## Roadmap
+
+- Publish `better-auth-cas` to npm.
+- Add typed examples for dynamic profile mapping strategies.
+- Add integration tests against a CAS-compatible mock server.
+
+## Release Guide
+
+See [docs/release-plugin.md](docs/release-plugin.md).
