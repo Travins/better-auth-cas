@@ -55,6 +55,11 @@ Then expose Better Auth with your route handler and call:
 
 - No real production CAS URL, keys, or DB credentials are stored in this repository.
 - `.env` is ignored; only `.env.example` placeholders are tracked.
+- Security reporting process: [SECURITY.md](SECURITY.md)
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for setup, workflow, and PR checklist.
 
 ## Roadmap
 
