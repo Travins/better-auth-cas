@@ -21,13 +21,21 @@ npm install better-auth-cas better-auth
 2. Register CAS plugin in your Better Auth config.
 3. Add Better Auth route handler (`/api/auth/[...all]`).
 4. Add a login button that calls `POST /api/auth/sign-in/cas`.
-5. Ensure callback path matches plugin config.
+5. Set explicit `redirectUri` to match CAS allowlist exactly (for example `http://localhost:3000/api/auth/cas/callback`).
+6. Add global logout route (`/api/logout`) to clear local session and redirect to CAS `/logout`.
 
 ## Recommended Defaults
 
 - `providerId`: `cas`
 - `callbackPath`: `/cas/callback`
 - `fallbackEmailDomain`: `noemail.local`
+- `redirectUri`: `${BETTER_AUTH_URL}/api/auth/cas/callback`
+
+## Runtime Behavior Notes
+
+- Local sign-out only clears app session. CAS SSO session may still be active.
+- If CAS session remains active, next login can appear automatic.
+- For expected re-authentication UX, use global logout: local sign-out + CAS `/logout`.
 
 ## Profile Mapping Suggestion
 

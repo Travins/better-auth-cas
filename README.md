@@ -51,6 +51,14 @@ Then expose Better Auth with your route handler and call:
 4. Plugin validates ticket via CAS `/serviceValidate`.
 5. Better Auth creates or links account and issues session.
 
+## Integration Notes From Real Testing
+
+- Local sign-out alone is not enough for CAS deployments. Use a global logout route (`/api/logout`) to clear local session and redirect to CAS `/logout`.
+- Many CAS servers strictly validate callback allowlists. Set `redirectUri` explicitly (for example `http://localhost:3000/api/auth/cas/callback`) to avoid service URL mismatch.
+- For a runnable reference, see `examples/simple-next` including:
+  - `src/app/api/me/route.ts`
+  - `src/app/api/logout/route.ts`
+
 ## Security Notes
 
 - No real production CAS URL, keys, or DB credentials are stored in this repository.
