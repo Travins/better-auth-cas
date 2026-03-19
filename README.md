@@ -70,3 +70,9 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for setup, workflow, and PR checklist.
 ## Release Guide
 
 See [docs/release-plugin.md](docs/release-plugin.md).
+
+## Project Governance
+
+- Contribution guide: [CONTRIBUTING.md](CONTRIBUTING.md)
+- Security policy: [SECURITY.md](SECURITY.md)
+- Changelog: [CHANGELOG.md](CHANGELOG.md)

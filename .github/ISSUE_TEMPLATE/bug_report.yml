@@ -1,0 +1,57 @@
+name: Bug report
+description: Report a reproducible bug in better-auth-cas
+title: "bug: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. Please include a minimal reproduction and sanitize sensitive values.
+  - type: input
+    id: summary
+    attributes:
+      label: Summary
+      description: One-line description of the bug
+      placeholder: CAS callback fails with state mismatch
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Versions and runtime info
+      placeholder: |
+        - Node:
+        - better-auth:
+        - better-auth-cas:
+        - Framework:
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Configure plugin with ...
+        2. Call /api/auth/sign-in/cas
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Sanitized logs / payloads
+      description: Remove any credentials, tickets, or private endpoints
