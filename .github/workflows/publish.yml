@@ -1,0 +1,58 @@
+name: publish
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: publish-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  npm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org
+          cache: npm
+          cache-dependency-path: packages/better-auth-cas/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci --prefix packages/better-auth-cas
+
+      - name: Validate tag matches package version
+        if: startsWith(github.ref, 'refs/tags/v')
+        shell: bash
+        run: |
+          TAG_VERSION="${GITHUB_REF_NAME#v}"
+          PACKAGE_VERSION="$(node -p "require('./packages/better-auth-cas/package.json').version")"
+          if [[ "$TAG_VERSION" != "$PACKAGE_VERSION" ]]; then
+            echo "::error::Tag version (v${TAG_VERSION}) does not match package version (${PACKAGE_VERSION})."
+            exit 1
+          fi
+
+      - name: Build
+        run: npm run --prefix packages/better-auth-cas build
+
+      - name: Test
+        run: npm run --prefix packages/better-auth-cas test
+
+      - name: Publish with Trusted Publishing (OIDC)
+        if: ${{ secrets.NPM_TOKEN == '' }}
+        run: npm publish --prefix packages/better-auth-cas --access public --provenance
+
+      - name: Publish with NPM token
+        if: ${{ secrets.NPM_TOKEN != '' }}
+        run: npm publish --prefix packages/better-auth-cas --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

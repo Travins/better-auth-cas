@@ -79,6 +79,11 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for setup, workflow, and PR checklist.
 
 See [docs/release-plugin.md](docs/release-plugin.md).
 
+## Automated Publishing
+
+This repo includes `.github/workflows/publish.yml`.
+When you push a tag like `v0.1.1`, GitHub Actions will validate, test, and publish `better-auth-cas` to npm.
+
 ## Project Governance
 
 - Contribution guide: [CONTRIBUTING.md](CONTRIBUTING.md)
