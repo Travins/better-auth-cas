@@ -50,23 +50,21 @@ jobs:
       - name: Test
         run: npm run --prefix packages/better-auth-cas test
 
-      - name: Verify OIDC token availability
-        if: ${{ secrets.NPM_TOKEN == '' }}
+      - name: Publish
         shell: bash
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
+          if [[ -n "${NODE_AUTH_TOKEN}" ]]; then
+            echo "Publishing with NPM_TOKEN fallback"
+            npm publish ./packages/better-auth-cas --access public
+            exit 0
+          fi
+
           if [[ -z "${ACTIONS_ID_TOKEN_REQUEST_TOKEN:-}" || -z "${ACTIONS_ID_TOKEN_REQUEST_URL:-}" ]]; then
             echo "::error::OIDC token is unavailable. Ensure job permissions include id-token: write."
             exit 1
           fi
 
-      - name: Publish with NPM_TOKEN
-        if: ${{ secrets.NPM_TOKEN != '' }}
-        shell: bash
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish ./packages/better-auth-cas --access public
-
-      - name: Publish with Trusted Publishing (OIDC)
-        if: ${{ secrets.NPM_TOKEN == '' }}
-        shell: bash
-        run: npm publish ./packages/better-auth-cas --access public --provenance
+          echo "Publishing with npm Trusted Publishing (OIDC)"
+          npm publish ./packages/better-auth-cas --access public --provenance
