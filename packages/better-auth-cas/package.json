@@ -1,10 +1,14 @@
 {
   "name": "better-auth-cas",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "private": false,
   "type": "module",
   "description": "Standard CAS plugin for Better Auth",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Travins/better-auth-cas"
+  },
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
