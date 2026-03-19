@@ -47,12 +47,15 @@ jobs:
       - name: Test
         run: npm run --prefix packages/better-auth-cas test
 
-      - name: Publish with Trusted Publishing (OIDC)
-        if: ${{ secrets.NPM_TOKEN == '' }}
-        run: npm publish --prefix packages/better-auth-cas --access public --provenance
-
-      - name: Publish with NPM token
-        if: ${{ secrets.NPM_TOKEN != '' }}
-        run: npm publish --prefix packages/better-auth-cas --access public
+      - name: Publish
+        shell: bash
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          if [[ -n "${NODE_AUTH_TOKEN}" ]]; then
+            echo "Publishing with NPM_TOKEN fallback"
+            npm publish --prefix packages/better-auth-cas --access public
+          else
+            echo "Publishing with npm Trusted Publishing (OIDC)"
+            npm publish --prefix packages/better-auth-cas --access public --provenance
+          fi
