@@ -1,6 +1,6 @@
 {
   "name": "better-auth-cas",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "private": false,
   "type": "module",
   "description": "Standard CAS plugin for Better Auth",

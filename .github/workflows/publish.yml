@@ -57,7 +57,7 @@ jobs:
         run: |
           if [[ -n "${NODE_AUTH_TOKEN}" ]]; then
             echo "Publishing with NPM_TOKEN fallback"
-            npm publish ./packages/better-auth-cas --access public
+            (cd packages/better-auth-cas && npm publish --access public)
             exit 0
           fi
 
@@ -67,4 +67,4 @@ jobs:
           fi
 
           echo "Publishing with npm Trusted Publishing (OIDC)"
-          npm publish ./packages/better-auth-cas --access public --provenance
+          (cd packages/better-auth-cas && npm publish --access public --provenance)
