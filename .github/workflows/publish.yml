@@ -28,7 +28,8 @@ jobs:
           cache-dependency-path: packages/better-auth-cas/package-lock.json
 
       - name: Install dependencies
-        run: npm ci --prefix packages/better-auth-cas
+        working-directory: packages/better-auth-cas
+        run: npm ci
 
       - name: Validate tag matches package version
         if: startsWith(github.ref, 'refs/tags/v')
@@ -42,20 +43,23 @@ jobs:
           fi
 
       - name: Build
-        run: npm run --prefix packages/better-auth-cas build
+        working-directory: packages/better-auth-cas
+        run: npm run build
 
       - name: Test
-        run: npm run --prefix packages/better-auth-cas test
+        working-directory: packages/better-auth-cas
+        run: npm run test
 
       - name: Publish
+        working-directory: packages/better-auth-cas
         shell: bash
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           if [[ -n "${NODE_AUTH_TOKEN}" ]]; then
             echo "Publishing with NPM_TOKEN fallback"
-            npm publish --prefix packages/better-auth-cas --access public
+            npm publish --access public
           else
             echo "Publishing with npm Trusted Publishing (OIDC)"
-            npm publish --prefix packages/better-auth-cas --access public --provenance
+            npm publish --access public --provenance
           fi
