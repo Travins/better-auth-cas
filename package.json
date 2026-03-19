@@ -1,26 +1,16 @@
 {
-  "name": "next-oauth",
+  "name": "better-auth-cas-skill",
   "version": "0.1.0",
   "private": true,
+  "description": "Better Auth CAS plugin + integration skill docs",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
-    "start": "next start",
-    "lint": "biome check",
-    "format": "biome format --write"
+    "plugin:install": "npm ci --prefix packages/better-auth-cas",
+    "plugin:build": "npm run --prefix packages/better-auth-cas build",
+    "plugin:test": "npm run --prefix packages/better-auth-cas test",
+    "plugin:verify": "npm run plugin:install && npm run plugin:build && npm run plugin:test"
   },
-  "dependencies": {
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
-    "next": "15.5.4"
-  },
-  "devDependencies": {
-    "typescript": "^5",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
-    "@biomejs/biome": "2.2.0"
-  }
+  "dependencies": {}
 }

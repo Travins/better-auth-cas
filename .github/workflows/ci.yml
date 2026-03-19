@@ -1,0 +1,22 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  plugin:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install plugin deps
+        run: npm ci --prefix packages/better-auth-cas
+      - name: Build plugin
+        run: npm run --prefix packages/better-auth-cas build
+      - name: Test plugin
+        run: npm run --prefix packages/better-auth-cas test
